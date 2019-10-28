@@ -1,5 +1,5 @@
 {
-    "name": "Medical-Chaincode",
+    "name": "recordContract",
     "version": "1.0.0",
     "description": "node.js chaincode on Hyperledger-fabric for medical records",
     "main": "index.js",

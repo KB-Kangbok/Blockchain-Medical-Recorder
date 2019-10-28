@@ -2,10 +2,10 @@
 
 const Contract = require('fabric-contract-api');
 
-class medicalContract extends Contract {
+class recordContract extends Contract {
     async queryRecords (ctx, patientId){
 
-        let recordsAsBytes = await ctx.stub.getState(studentId);
+        let recordsAsBytes = await ctx.stub.getState(patientId);
         if(!recordsAsBytes || recordsAsBytes.toString().length <= 0){
             throw new Error('Patient with this Id does not exist: ');
         }
@@ -18,4 +18,4 @@ class medicalContract extends Contract {
     }
 }
 
-module.exports = medicalContract;
+module.exports = recordContract;

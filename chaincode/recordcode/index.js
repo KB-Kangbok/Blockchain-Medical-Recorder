@@ -1,3 +1,3 @@
 'use strict';
-const medicalContract = require('./logic');
-module.exports.contracts = [ medicalContract ];
+const recordContract = require('./logic');
+module.exports.contracts = [ recordContract ];
