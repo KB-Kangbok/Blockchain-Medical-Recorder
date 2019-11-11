@@ -15,6 +15,13 @@ class recordContract extends Contract {
 
     async addRecords (ctx, patientId, date, symptom, medication){
         
+        const record = {
+            date,
+            symptom,
+            medication
+        };
+
+        await ctx.stub.putState(patientId, Buffer.from(JSON.stringify(record)));
     }
 }
 
