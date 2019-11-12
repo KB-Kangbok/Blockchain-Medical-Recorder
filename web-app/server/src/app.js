@@ -22,24 +22,99 @@ const config = JSON.parse(configJSON);
 //use this identity to query
 const appAdmin = config.appAdmin;
 
-//get all assets in world state;
-app.get('/queryAll', async (req, res) => {
+//query for certain objects within the world state
+app.post('/queryWithQueryString', async (req, res) => {
 
-  let networkObj = await network.connectionToNetwork(appAdmin);
-  let response = await network.invoke(networkObj, true, 'queryAll', '');
+  let networkObj = await network.connectToNetwork(appAdmin);
+  let response = await network.invoke(networkObj, true, 'queryRecords', req.body.selected);
   let parsedResponse = await JSON.parse(response);
   res.send(parsedResponse);
 
 });
 
-//query for certain objects within the world state
-app.post('/queryWithQueryString', async (req, res) => {
+//get user records
+app.post('/queryRecords', async (req,res) => {
+  console.log('req.body: ');
+  console.log(req.body);
+  let args = [req.body];
 
   let networkObj = await network.connectToNetwork(appAdmin);
-  let response = await network.invoke(networkObj, true, 'queryByObjectType', req.body.selected);
+  console.log('after network OBj');
+  let response = await network.invoke(networkObj, true, 'queryRecords', args);
   let parsedResponse = await JSON.parse(response);
   res.send(parsedResponse);
+});
 
+//give auth to doctor
+app.post('/giveAuth', async (req,res) => {
+  console.log('req.body: ');
+  console.log(req.body);
+  let args = [req.body];
+
+  let networkObj = await network.connectToNetwork(appAdmin);
+  console.log('after network OBj');
+  let response = await network.invoke(networkObj, false, 'giveAuth', args);
+  if(response.error){
+    res.send(response.error);
+  } else {
+    console.log('response: ');
+    console.log(response);
+    res.send(response);
+  }
+});
+
+//remove auth to doctor
+app.post('/removeAuth', async (req,res) => {
+  console.log('req.body: ');
+  console.log(req.body);
+  let args = [req.body];
+
+  let networkObj = await network.connectToNetwork(appAdmin);
+  console.log('after network OBj');
+  let response = await network.invoke(networkObj, false, 'removeAuth', args);
+  if(response.error){
+    res.send(response.error);
+  } else {
+    console.log('response: ');
+    console.log(response);
+    res.send(response);
+  }
+});
+
+//create record
+app.post('/createRecord', async (req, res) => {
+  console.log('req.body: ');
+  console.log(req.body);
+  let args = [req.body.args];
+
+  let networkObj = await network.connectToNetwork(req.body.userId);
+  console.log('after network OBj')
+  let response = await network.invoke(networkObj,false,'createRecord', args);
+  if (response.error) {
+    res.send(response.error);
+  } else {
+    console.log('response: ');
+    console.log(response);
+    res.send(response);
+  }
+});
+
+//delete record
+app.post('/deleteRecord', async (req, res) => {
+  console.log('req.body: ');
+  console.log(req.body);
+  let args = [req.body.args];
+
+  let networkObj = await network.connectToNetwork(req.body.userId);
+  console.log('after network OBj')
+  let response = await network.invoke(networkObj,false,'deleteRecord', args);
+  if (response.error) {
+    res.send(response.error);
+  } else {
+    console.log('response: ');
+    console.log(response);
+    res.send(response);
+  }
 });
 
 //get user info, create user object, and update state with their userId
@@ -50,7 +125,7 @@ app.post('/registerUser', async (req, res) => {
   let userId = req.body.userId;
 
   //first create the identity for the user and add to wallet
-  let response = await network.registerUser(userId, req.body.registrarId, req.body.firstName, req.body.lastName);
+  let response = await network.registerUser(userId, req.body.userType, req.body.firstName, req.body.lastName);
   console.log('response from registerUster: ');
   console.log(response);
   if (response.error) {
@@ -70,7 +145,7 @@ app.post('/registerUser', async (req, res) => {
 
     req.body = JSON.stringify(req.body);
     let args = [req.body];
-    //connect to network and update the state with voterId  
+    //connect to network and update the state with userId  
 
     let invokeResponse = await network.invoke(networkObj, false, 'createUser', args);
     
@@ -99,20 +174,6 @@ app.post('/validateUser', async (req, res) => {
   if (networkObj.error) {
     res.send(networkObj);
   }
-
-  // let invokeResponse = await network.invoke(networkObj, true, 'readMyAsset', req.body.userId);
-  // if (invokeResponse.error) {
-  //   res.send(invokeResponse);
-  // } else {
-  //   console.log('after network.invoke ');
-  //   let parsedResponse = await JSON.parse(invokeResponse);
-  //   if (parsedResponse.ballotCast) {
-  //   let response = {};
-  //   response.error = 'This voter has already cast a ballot, we cannot allow double-voting!';
-  //   res.send(response);
-  //   }
-  //   res.send(parsedResponse);
-  // }
 
 });
   

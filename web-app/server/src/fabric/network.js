@@ -21,7 +21,7 @@ const ccp = JSON.parse(ccpJSON);
 
 const util = require('util');
 
-exports.connectionToNetwork = async function (userName) {
+exports.connectToNetwork = async function (userName) {
 
   const gateway = new Gateway();
 
@@ -52,7 +52,7 @@ exports.connectionToNetwork = async function (userName) {
 
     console.log('Connect to mychannel.');
     //Get the contract installed on the peer
-    const contract = await network.getContract('recordContract');
+    const contract = await network.getContract('medicalContract');
 
     let networkObj = {
       contract: contract,
@@ -138,15 +138,15 @@ exports.invoke = async function (networkObj, isQuery, func, args){
   }
 };
 
-exports.registerUser = async function(userId, registrarId, firstName, lastName){
+exports.registerUser = async function(userId, userType, firstName, lastName){
 
   console.log('registrarId');
-  console.log(registrarId);
+  console.log(userType);
 
   console.log('userId');
   console.log(userId);
 
-  if (!registrarId || !userId || !firstName || !lastName){
+  if (!userType || !userId || !firstName || !lastName){
     let response = {};
     response.error = 'Error! You need to fill all fields before you can register!';
     return response;
