@@ -2,14 +2,12 @@
 
 // Import Hyperledger Fabric
 const { Contract } = require('fabric-contract-api');
-const path = require('path');
-const fs = require('fs');
 
 // Import files with constructor
 let User = require('./User');
 let Record = require('./Record');
 
-class medicalContract extends Contract {
+class MyAssetContract extends Contract {
     async init(ctx){
         console.log('instantiate called');
 
@@ -17,7 +15,7 @@ class medicalContract extends Contract {
         let records = [];
 
         //create user
-        let user1 = await new User('user1', 'patient', 'KB', 'Lee');
+        let user1 = await new User('user1', 'patient', 'KB', 'Lee', records, ['user1']);
 
         //update user array
         users.push(user1);
@@ -50,7 +48,7 @@ class medicalContract extends Contract {
 
         //get user data from ctx
         let userData = await this.readMyAsset(ctx, userId);
-        let user = new User(userData.userId, userData.userType, userData.firstName, userData.lastName, userData.records, userData.observableId);
+        let user = await new User(userData.userId, userData.userType, userData.firstName, userData.lastName, userData.records, userData.observableId);
 
         return user;
     }
@@ -257,4 +255,4 @@ class medicalContract extends Contract {
     
 }
 
-module.exports = recordContract;
+module.exports = MyAssetContract;

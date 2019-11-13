@@ -1,5 +1,5 @@
 {
-    "name": "recordContract",
+    "name": "medicalContract",
     "version": "1.0.0",
     "description": "node.js chaincode on Hyperledger-fabric for medical records",
     "main": "index.js",
@@ -8,8 +8,6 @@
         "npm": ">=5"
     },
     "scripts": {
-        "lint": "eslint .",
-        "pretest": "npm run lint",
         "test": "nyc mocha --recursive",
         "start": "fabric-chaincode-node start"
     },
