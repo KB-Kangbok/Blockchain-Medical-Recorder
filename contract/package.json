@@ -1,6 +1,6 @@
 {
     "name": "medicalContract",
-    "version": "1.0.2",
+    "version": "1.1.8",
     "description": "node.js chaincode on Hyperledger-fabric for medical records",
     "main": "index.js",
     "engines": {

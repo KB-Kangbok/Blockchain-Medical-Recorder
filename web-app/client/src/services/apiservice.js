@@ -14,8 +14,6 @@ export default {
       userId: userId,
       userType: userType,
       firstName: firstName,
-      lastName: lastName,
-      password: password
     }) 
   },
   validateUser(userId) {
@@ -28,5 +26,13 @@ export default {
     return Api().post('queryByKey', {
       key: key
     }) 
+  },
+  createUser(userId, userType, firstName, lastName){
+    return Api().post('createUser', {
+      userId:userId,
+      userType:userType,
+      firstName:firstName,
+      lastName:lastName
+    })
   }
 }

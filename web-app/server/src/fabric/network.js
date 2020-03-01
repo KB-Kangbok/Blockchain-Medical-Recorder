@@ -75,7 +75,7 @@ exports.connectToNetwork = async function (userName) {
 exports.invoke = async function (networkObj, isQuery, func, args){
   try {
     console.log('inside invoke');
-    console.log(`isQuery: ${isQuery}, func: ${func}, arges: ${args}`);
+    console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
     console.log(util.inspect(networkObj));
 
     if(isQuery === true){
@@ -113,7 +113,7 @@ exports.invoke = async function (networkObj, isQuery, func, args){
 
         console.log('before submit');
         console.log(util.inspect(networkObj));
-        let response = await networkObj.contract.submitTransaction(func, args);
+        let response = await networkObj.contract.submitTransaction(func, JSON.stringify(args));
         console.log('after submit');
 
         console.log(response);

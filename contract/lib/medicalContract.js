@@ -70,93 +70,103 @@ class MyAssetContract extends Contract {
         }
 
         //get user object
-        let user = await this.readUser(ctx, args.patientId);
+        let user = await this.readMyAsset(ctx, args.patientId);
 
         //set reference to user
-        user.records.push(args.patientId);
+        user.records.push(newRecord.recordId);
 
         //update state with new user
         await ctx.stub.putState(newRecord.recordId, Buffer.from(JSON.stringify(newRecord)));
-        await ctx.stub.putstate(user.userId, Buffer.from(JSON.stringify(user)));
+        await ctx.stub.putState(user.userId, Buffer.from(JSON.stringify(user)));
     }
 
-    async deleteRecord(ctx, recordId){
+    async deleteRecord(ctx, args){
+        args = JSON.parse(args);
+
         //check if record exists
-        const exists = await this.myAssetExists(ctx, recordId);
+        const exists = await this.myAssetExists(ctx, args.recordId);
         if(!exists){
             let response = {};
-            response.error = `Record ${recordId} does not exist`;
+            response.error = `Record ${args.recordId} does not exist`;
             return response;
         }
 
-        let record = await this.readMyAsset(ctx, recordId);
+        let record = await this.readMyAsset(ctx, args.recordId);
 
         //get patient data and delete record data in patient data
-        let patient = await this.readUser(ctx, record.patientId);
-        await patient.deleteRecord(recordId);
+        let patient = await this.readMyAsset(ctx, record.patientId);
+        let idx = patient.records.indexOf(args.recordId);
+        await patient.records.splice(idx,1);
 
         //delete record and update patient
-        await this.deleteMyAsset(ctx,recordId);
+        await this.deleteMyAsset(ctx,args.recordId);
         await ctx.stub.putState(patient.userId, Buffer.from(JSON.stringify(patient)));
     }
 
     //give doctor auth to look for patient records
-    async giveAuth(ctx, doctorId, patientId){
-        let doctor = await this.readUser(ctx, doctorId);
+    async giveAuth(ctx, args){
+        args = JSON.parse(args);
+
+        let doctor = await this.readMyAsset(ctx, args.doctorId);
         
         //check if doctor already has auth
-        let idx = doctor.observableId.indexOf(patientId);
+        let idx = await doctor.observableId.indexOf(args.patientId);
         if(idx !== -1) {
             response = {};
-            response.error = `Doctor already has auth to ${patientId}`;
+            response.error = `Doctor already has auth to ${args.patientId}`;
             return response;
         }
 
-        doctor.observableId.push(patientId);
+        await doctor.observableId.push(args.patientId);
         
         await ctx.stub.putState(doctor.userId, Buffer.from(JSON.stringify(doctor)));
     }
 
     //remove doctor's auth to see patient's records
-    async removeAuth(ctx, doctorId, patientId){
-        let doctor = await this.readUser(ctx, doctorId);
+    async removeAuth(ctx, args){
+        args = JSON.parse(args);
+
+        let doctor = await this.readMyAsset(ctx, args.doctorId);
 
         //check if doctor has auth
-        const idx = doctor.observableId.indexOf(patientId);
+        const idx = doctor.observableId.indexOf(args.patientId);
         if(idx === -1) {
             let response = {};
-            response.error = `Doctor already does not have auth to ${patientId}`;
+            response.error = `Doctor already does not have auth to ${args.patientId}`;
             return response;
         }
 
-        await doctor.deleteAuth(patientId);
+        await doctor.observableId.splice(idx,1);
 
         await ctx.stub.putState(doctor.userId, Buffer.from(JSON.stringify(doctor)));
     }
 
-    async validateAuth (ctx, userId, patientId){
-        let user = await this.readUser(ctx, userId);
+    async validateAuth (ctx, args){
+        args = JSON.parse(args);
+        let user = await this.readMyAsset(ctx, args.userId);
 
-        const idx = user.observableId.indexOf(patientId);
+        const idx = user.observableId.indexOf(args.patientId);
         return (idx!==-1);        
     }
 
-    async queryRecords (ctx, userId, patientId){
+    async queryRecords (ctx, args){
+        
         //check if user has auth to query record
-        const auth = await this.validateAuth(ctx, userId, patientId);
+        const auth = await this.validateAuth(ctx, args);
         if(!auth){
             let response = {};
-            response.error = `The user ${userId} does not have authentication to see records of ${patientId}`;
+            response.error = `The user ${args.userId} does not have authentication to see records of ${args.patientId}`;
             return response;
         }
-
+        
         //get patient data to get access to record
-        let patient = await this.readUser(ctx, patientId);
+        args = JSON.parse(args);
+        let patient = await this.readMyAsset(ctx, args.patientId);
         
         //check if patient has any record
         if(!patient.records || patient.records.length <= 0){
             let response = {};
-            response.error = `The user ${userId} does not have authentication to see records of ${patientId}`;
+            response.error = `The user ${args.userId} does not have authentication to see records of ${args.patientId}`;
             return response;
         }
 
@@ -164,7 +174,7 @@ class MyAssetContract extends Contract {
         var i;
         for (i = 0; i < patient.records.length; i++){
             let record = await this.readMyAsset(ctx, patient.records[i]);
-            allResults.push(JSON.stringify(record));
+            allResults.push(record);
         }
 
         return JSON.stringify(allResults)
