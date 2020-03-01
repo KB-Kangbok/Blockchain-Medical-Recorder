@@ -1,9 +1,6 @@
 import Api from '@/services/api';
 
 export default {
-  queryAll() {
-    return Api().get('queryAll')
-  },
   queryByObjectType() {
     return Api().get('queryByObjectType')
   },
@@ -18,12 +15,13 @@ export default {
       userType: userType,
       firstName: firstName,
       lastName: lastName,
-      
+      password: password
     }) 
   },
   validateUser(userId) {
-    return Api().post('validateVoter', {
-      userId: userId
+    return Api().post('validateUser', {
+      userId: userId,
+      password:password
     }) 
   },
   queryByKey(key) {
