@@ -175,7 +175,7 @@ app.post('/validateUser', async (req, res) => {
     res.send(networkObj);
   }
 
-  let invokeResponse = await network.invoke(networkObj, true, 'readUser', req.body.userId);
+  let invokeResponse = await network.invoke(networkObj, true, 'readMyAsset', req.body.userId);
   if (invokeResponse.error) {
     res.send(invokeResponse);
   } else {
