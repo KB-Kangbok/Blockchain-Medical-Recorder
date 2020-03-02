@@ -15,7 +15,7 @@ class MyAssetContract extends Contract {
         let records = [];
 
         //create user
-        let user1 = await new User('user1', 'patient', 'KB', 'Lee', records, ['user1']);
+        let user1 = await new User('user1', 'patient', 'KB', 'Lee', '1234', records, ['user1']);
 
         //update user array
         users.push(user1);

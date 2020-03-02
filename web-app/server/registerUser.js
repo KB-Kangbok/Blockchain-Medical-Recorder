@@ -21,7 +21,7 @@ const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
 async function main() {
-  let userName = 'user1';
+  let userName = 'user2';
   try {
 
     // Create a new file system based wallet for managing identities.
