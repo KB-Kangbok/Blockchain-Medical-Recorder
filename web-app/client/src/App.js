@@ -17,7 +17,7 @@ function App(props) {
   async function onLoad() {
     try {
       // await Auth.currentSession();
-      userHasAuthenticated(true);
+      userHasAuthenticated(false);
     }
     catch(e) {
       if (e !== 'No current user') {
@@ -36,21 +36,21 @@ function App(props) {
   return (
     !isAuthenticating &&
     <div className="App container">
-      <Navbar bg="light" expand="lg" fluid="true" collapseOnSelect>
+      <Navbar bg="light" expand="lg" fluid="true" variant="light" collapseOnSelect>
         <Navbar.Brand>
-          <Link to="/">Scratch</Link>
+          <Link to="/">Home</Link>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
-          <Nav pullRight>
+          <Nav variant="pills">
           {isAuthenticated
-            ? <NavItem onClick={handleLogout}>Logout</NavItem>
+            ? <Nav.Item onClick={handleLogout}>Logout</Nav.Item>
             : <>
                 <LinkContainer to="/signup">
-                  <NavItem>Signup</NavItem>     
+                  <Nav.Item>Signup</Nav.Item>     
                 </LinkContainer>
                 <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
+                  <Nav.Item>Login</Nav.Item>
                 </LinkContainer>
               </>
           }

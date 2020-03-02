@@ -31,7 +31,7 @@ class MyAssetContract extends Contract {
         args = JSON.parse(args);
 
         //create new user
-        let newUser = await new User(args.userId, args.userType, args.firstName, args.lastName, [], [args.userId]);
+        let newUser = await new User(args.userId, args.userType, args.firstName, args.lastName, args.password, [], [args.userId]);
 
         //update state with new user
         await ctx.stub.putState(newUser.userId, Buffer.from(JSON.stringify(newUser)));

@@ -8,22 +8,27 @@ import {
 import LoaderButton from "../components/LoaderButton";
 import { useFormFields } from "../libs/hooksLib";
 import "./Signup.css";
+import PostsService from "../services/apiservice"
 
 export default function Signup(props) {
   const [fields, handleFieldChange] = useFormFields({
-    email: "",
+    userId: "",
     password: "",
     confirmPassword: "",
-    confirmationCode: ""
+    firstName: "",
+    lastName: "",
+    userType: "patient"
   });
   const [newUser, setNewUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
     return (
-      fields.email.length > 0 &&
+      fields.userId.length > 0 &&
       fields.password.length > 0 &&
-      fields.password === fields.confirmPassword
+      fields.password === fields.confirmPassword &&
+      fields.firstName.length > 0 &&
+      fields.lastName.length > 0
     );
   }
 
@@ -37,7 +42,8 @@ export default function Signup(props) {
     setIsLoading(true);
 
     try {
-      const newUser = {username: fields.email, password: fields.password};
+      const apiResponse = await PostsService.registerUser(fields.userId, fields.userType, fields.firstName, fields.lastName, fields.password);
+      const newUser = {username: fields.userId, password: fields.password};
 
       setNewUser(newUser);
       setIsLoading(false);
@@ -86,16 +92,23 @@ export default function Signup(props) {
   function renderForm() {
     return (
       <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <FormLabel>Email</FormLabel>
+        <FormGroup controlId="userType" size="lg">
+          <FormLabel>Type</FormLabel>
+          <FormControl as="select" value={fields.userType} onChange={handleFieldChange}>
+            <option>patient</option>
+            <option>doctor</option>
+          </FormControl>
+        </FormGroup>
+        <FormGroup controlId="userId" size="lg">
+          <FormLabel>User ID</FormLabel>
           <FormControl
             autoFocus
-            type="email"
-            value={fields.email}
+            type="text"
+            value={fields.userId}
             onChange={handleFieldChange}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password" size="lg">
           <FormLabel>Password</FormLabel>
           <FormControl
             type="password"
@@ -103,7 +116,7 @@ export default function Signup(props) {
             onChange={handleFieldChange}
           />
         </FormGroup>
-        <FormGroup controlId="confirmPassword" bsSize="large">
+        <FormGroup controlId="confirmPassword" size="lg">
           <FormLabel>Confirm Password</FormLabel>
           <FormControl
             type="password"
@@ -111,10 +124,26 @@ export default function Signup(props) {
             value={fields.confirmPassword}
           />
         </FormGroup>
+        <FormGroup controlId="firstName" size="lg">
+          <FormLabel>First Name</FormLabel>
+          <FormControl 
+            type="text"
+            onChange={handleFieldChange}
+            value={fields.firstName}
+          />
+        </FormGroup>
+        <FormGroup controlId="lastName" size="lg">
+          <FormLabel>Last Name</FormLabel>
+          <FormControl 
+            type="text"
+            onChange={handleFieldChange}
+            value={fields.lastName}
+          />
+        </FormGroup>
         <LoaderButton
           block
           type="submit"
-          bsSize="large"
+          size="lg"
           isLoading={isLoading}
           disabled={!validateForm()}
         >

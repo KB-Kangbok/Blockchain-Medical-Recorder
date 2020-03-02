@@ -1,11 +1,12 @@
 'use strict';
 
 class User {
-  constructor(userId, userType, firstName, lastName, records, observableId){
+  constructor(userId, userType, firstName, lastName, password, records, observableId){
     this.userId = userId;
     this.userType = userType;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.password = password
     this.observableId = observableId;
     this.records = records;
     this.type = 'user';

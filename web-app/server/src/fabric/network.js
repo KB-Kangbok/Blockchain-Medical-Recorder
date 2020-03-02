@@ -138,15 +138,15 @@ exports.invoke = async function (networkObj, isQuery, func, args){
   }
 };
 
-exports.registerUser = async function(userId, userType, firstName, lastName){
+exports.registerUser = async function(userId, userType, firstName, lastName, password){
 
-  console.log('registrarId');
+  console.log('userType');
   console.log(userType);
 
   console.log('userId');
   console.log(userId);
 
-  if (!userType || !userId || !firstName || !lastName){
+  if (!userType || !userId || !firstName || !lastName || !password){
     let response = {};
     response.error = 'Error! You need to fill all fields before you can register!';
     return response;

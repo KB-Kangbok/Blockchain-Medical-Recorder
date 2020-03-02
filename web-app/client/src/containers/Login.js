@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import { useFormFields } from "../libs/hooksLib";
+import PostsService from "../services/apiservice"
 import "./Login.css";
 
 export default function Login(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
-    email: "",
+    userId: "",
     password: ""
   });
 
   function validateForm() {
-    return fields.email.length > 0 && fields.password.length > 0;
+    return fields.userId.length > 0 && fields.password.length > 0;
   }
 
   async function handleSubmit(event) {
@@ -21,9 +22,17 @@ export default function Login(props) {
     setIsLoading(true);
     try {
       // await Auth.signIn(email, password);
-      alert("Logged in");
-      props.userHasAuthenticated(true);
-      props.history.push("/");
+      const apiResponse = await PostsService.validateUser(fields.userId, fields.password);
+      console.log("apiResponse");
+      console.log(apiResponse.data);
+
+      if(apiResponse.data.error) {
+        console.log(apiResponse.data.error);
+      } else{
+        alert("Logged in");
+        props.userHasAuthenticated(true);
+        props.history.push("/");
+      }
     } catch (e) {
       alert(e.message);
       setIsLoading(false);
@@ -33,16 +42,15 @@ export default function Login(props) {
   return (
     <div className="Login">
       <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <FormLabel>Email</FormLabel>
+        <FormGroup controlId="userId" size="lg">
+          <FormLabel>User Id</FormLabel>
           <FormControl
             autoFocus
-            type="email"
-            value={fields.email}
+            value={fields.userId}
             onChange={handleFieldChange}
           />
         </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
+        <FormGroup controlId="password" size="lg">
           <FormLabel>Password</FormLabel>
           <FormControl
             value={fields.password}
@@ -53,7 +61,7 @@ export default function Login(props) {
         <LoaderButton
           block
           type="submit"
-          bsSize="large"
+          size="lg"
           isLoading={isLoading}
           disabled={!validateForm()}
         >

@@ -1,4 +1,4 @@
-import Api from '@/services/api';
+import Api from "../services/api"
 
 export default {
   queryByObjectType() {
@@ -9,14 +9,16 @@ export default {
       selected: selected
     }) 
   },
-  registerUser(userId, userType, firstName, lastName) {
+  registerUser(userId, userType, firstName, lastName, password) {
     return Api().post('registerUser', {
       userId: userId,
       userType: userType,
       firstName: firstName,
+      lastName: lastName,
+      password: password
     }) 
   },
-  validateUser(userId) {
+  validateUser(userId, password) {
     return Api().post('validateUser', {
       userId: userId,
       password:password
@@ -26,13 +28,5 @@ export default {
     return Api().post('queryByKey', {
       key: key
     }) 
-  },
-  createUser(userId, userType, firstName, lastName){
-    return Api().post('createUser', {
-      userId:userId,
-      userType:userType,
-      firstName:firstName,
-      lastName:lastName
-    })
   }
 }

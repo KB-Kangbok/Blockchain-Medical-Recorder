@@ -125,8 +125,8 @@ app.post('/registerUser', async (req, res) => {
   let userId = req.body.userId;
 
   //first create the identity for the user and add to wallet
-  let response = await network.registerUser(userId, req.body.userType, req.body.firstName, req.body.lastName);
-  console.log('response from registerUster: ');
+  let response = await network.registerUser(userId, req.body.userType, req.body.firstName, req.body.lastName, req.body.password);
+  console.log('response from registerUser: ');
   console.log(response);
   if (response.error) {
     res.send(response.error);
