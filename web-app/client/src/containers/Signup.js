@@ -32,10 +32,6 @@ export default function Signup(props) {
     );
   }
 
-  function validateConfirmationForm() {
-    return fields.confirmationCode.length > 0;
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -45,6 +41,11 @@ export default function Signup(props) {
       const apiResponse = await PostsService.registerUser(fields.userId, fields.userType, fields.firstName, fields.lastName, fields.password);
       const newUser = {username: fields.userId, password: fields.password};
 
+      console.log(apiResponse.data);
+      if(apiResponse.data.error) {
+        console.log("ERROR!!!");
+        console.log(apiResponse.data.error);
+      }
       setNewUser(newUser);
       setIsLoading(false);
       
@@ -55,38 +56,6 @@ export default function Signup(props) {
       setIsLoading(false);
     }
 
-  }
-
-  async function handleConfirmationSubmit(event) {
-    event.preventDefault();
-
-    setIsLoading(true);
-  }
-
-  function renderConfirmationForm() {
-    return (
-      <form onSubmit={handleConfirmationSubmit}>
-        <FormGroup controlId="confirmationCode" bsSize="large">
-          <FormLabel>Confirmation Code</FormLabel>
-          <FormControl
-            autoFocus
-            type="tel"
-            onChange={handleFieldChange}
-            value={fields.confirmationCode}
-          />
-          <FormText>Please check your email for the code.</FormText>
-        </FormGroup>
-        <LoaderButton
-          block
-          type="submit"
-          bsSize="large"
-          isLoading={isLoading}
-          disabled={!validateConfirmationForm()}
-        >
-          Verify
-        </LoaderButton>
-      </form>
-    );
   }
 
   function renderForm() {
@@ -155,7 +124,7 @@ export default function Signup(props) {
 
   return (
     <div className="Signup">
-      {newUser === null ? renderForm() : renderConfirmationForm()}
+      {renderForm()}
     </div>
   );
 }

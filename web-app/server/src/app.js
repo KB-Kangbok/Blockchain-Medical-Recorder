@@ -175,6 +175,22 @@ app.post('/validateUser', async (req, res) => {
     res.send(networkObj);
   }
 
+  let invokeResponse = await network.invoke(networkObj, true, 'readUser', req.body.userId);
+  if (invokeResponse.error) {
+    res.send(invokeResponse);
+  } else {
+    console.log('after network.invoke ');
+    let parsedResponse = await JSON.parse(invokeResponse);
+    console.log(parsedResponse);
+    let userPW = parsedResponse.password;
+
+    if (userPW != req.body.password) {
+      let response = {};
+      response.error = `Invalid password for ${req.body.userId}!`;
+      res.send(response);
+    }
+    res.send(parsedResponse);
+  }
 });
   
 app.post('/queryByKey', async (req, res) => {

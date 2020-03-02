@@ -28,7 +28,10 @@ export default function Login(props) {
 
       if(apiResponse.data.error) {
         console.log(apiResponse.data.error);
+        setIsLoading(false);
+        alert(apiResponse.data.error);
       } else{
+        setIsLoading(false);
         alert("Logged in");
         props.userHasAuthenticated(true);
         props.history.push("/");

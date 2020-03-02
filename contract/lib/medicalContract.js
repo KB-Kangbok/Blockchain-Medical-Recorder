@@ -48,7 +48,7 @@ class MyAssetContract extends Contract {
 
         //get user data from ctx
         let userData = await this.readMyAsset(ctx, userId);
-        let user = await new User(userData.userId, userData.userType, userData.firstName, userData.lastName, userData.records, userData.observableId);
+        let user = await new User(userData.userId, userData.userType, userData.firstName, userData.lastName, userData.password, userData.records, userData.observableId);
 
         return user;
     }
