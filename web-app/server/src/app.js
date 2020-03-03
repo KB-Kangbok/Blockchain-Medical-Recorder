@@ -144,10 +144,10 @@ app.post('/registerUser', async (req, res) => {
     console.log(util.inspect(networkObj));
 
     req.body = JSON.stringify(req.body);
-    let args = [req.body];
+    let args = req.body;
     //connect to network and update the state with userId  
 
-    let invokeResponse = await network.invoke(networkObj, false, 'createUser', args);
+    let invokeResponse = await network.invoke(networkObj, false, 'createUser', [JSON.stringify(args)]);
     
     if (invokeResponse.error) {
       res.send(invokeResponse.error);
