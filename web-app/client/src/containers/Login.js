@@ -36,9 +36,11 @@ export default function Login(props) {
         props.setFirstName(apiResponse.data.firstName);
         props.setLastName(apiResponse.data.lastName);
         props.setUserType(apiResponse.data.userType);
+        props.setRecords(apiResponse.data.records);
+        props.setAuth(apiResponse.data.observableId)
         alert("Logged in");
         props.userHasAuthenticated(true);
-        props.history.push("/");
+        props.history.push("/dashboard");
       }
     } catch (e) {
       alert(e.message);

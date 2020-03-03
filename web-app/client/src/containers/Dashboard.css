@@ -1,5 +1,22 @@
-.sidebar {
-  background-color: lightgrey;
+.greet {
   text-align: center;
-  height: 100%;
+  font-weight: bold;
+}
+.sidebar {
+  height: 300%;
+  text-align: center;
+}
+.form {
+  width: 100%;
+  text-align:left;
+}
+.main {
+  font-size: 16px;
+  width:100%;
+}
+.label {
+  text-align: left;
+}
+.invisible {
+  display: none;
 }
