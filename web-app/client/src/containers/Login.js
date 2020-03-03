@@ -32,6 +32,10 @@ export default function Login(props) {
         alert(apiResponse.data.error);
       } else{
         setIsLoading(false);
+        props.setUserId(fields.userId);
+        props.setFirstName(apiResponse.data.firstName);
+        props.setLastName(apiResponse.data.lastName);
+        props.setUserType(apiResponse.data.userType);
         alert("Logged in");
         props.userHasAuthenticated(true);
         props.history.push("/");

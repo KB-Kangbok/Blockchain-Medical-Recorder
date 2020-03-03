@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <div className="Home">
       <div className="lander">
-        <h1>Scratch</h1>
-        <p>A simple note taking app</p>
+        <h1>Welcome to Medical Recorder!</h1>
+        <p>The blockchain medical recorder by KB</p>
       </div>
     </div>
   );

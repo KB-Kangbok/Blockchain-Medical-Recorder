@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  FormText,
   FormGroup,
   FormControl,
   FormLabel
@@ -49,8 +48,8 @@ export default function Signup(props) {
       setNewUser(newUser);
       setIsLoading(false);
       
-      props.userHasAuthenticated(true);
-      props.history.push("/");
+      alert(`Successfully registered ${fields.userId}!`);
+      props.history.push("/login");
     } catch(e) {
       alert(e.message);
       setIsLoading(false);

@@ -1,6 +1,15 @@
 import Api from "../services/api"
 
 export default {
+  queryRecords(userId, patientId){
+    return Api().post('queryRecords', {
+      userId: userId,
+      patientId: patientId
+    })
+  },
+  giveAuth(userId, patientId){
+    
+  },
   queryByObjectType() {
     return Api().get('queryByObjectType')
   },

@@ -23,7 +23,7 @@ const config = JSON.parse(configJSON);
 const appAdmin = config.appAdmin;
 
 //query for certain objects within the world state
-app.post('/queryWithQueryString', async (req, res) => {
+app.get('/queryWithQueryString', async (req, res) => {
 
   let networkObj = await network.connectToNetwork(appAdmin);
   let response = await network.invoke(networkObj, true, 'queryRecords', req.body.selected);
@@ -36,11 +36,11 @@ app.post('/queryWithQueryString', async (req, res) => {
 app.post('/queryRecords', async (req,res) => {
   console.log('req.body: ');
   console.log(req.body);
-  let args = [req.body];
+  let args = req.body;
 
   let networkObj = await network.connectToNetwork(appAdmin);
   console.log('after network OBj');
-  let response = await network.invoke(networkObj, true, 'queryRecords', args);
+  let response = await network.invoke(networkObj, true, 'queryRecords', JSON.stringify(args));
   let parsedResponse = await JSON.parse(response);
   res.send(parsedResponse);
 });
