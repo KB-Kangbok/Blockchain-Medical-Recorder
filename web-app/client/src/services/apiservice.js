@@ -7,16 +7,38 @@ export default {
       patientId: patientId
     })
   },
-  giveAuth(userId, patientId){
-    
+  giveAuth(userId, doctorId){
+    return Api().post('giveAuth', {
+      patientId: userId,
+      doctorId: doctorId
+    })
   },
-  queryByObjectType() {
-    return Api().get('queryByObjectType')
+  removeAuth(userId, doctorId) {
+    return Api().post('removeAuth', {
+      patientId: userId,
+      doctorId: doctorId
+    })
   },
-  queryWithQueryString(selected) {
-    return Api().post('queryWithQueryString', {
-      selected: selected
-    }) 
+  createRecord(userId, patientId, date, symptom, medication, doctorName, description){
+    return Api().post('createRecord', {
+      userId: userId,
+      args: {
+        patientId: patientId,
+        date: date,
+        symptom: symptom,
+        medication: medication,
+        doctorName: doctorName,
+        description: description
+      }
+    })
+  },
+  deleteRecord(userId, recordId) {
+    return Api().post('deleteRecord', {
+      userId: userId,
+      args: {
+        recordId: recordId
+      }
+    })
   },
   registerUser(userId, userType, firstName, lastName, password) {
     return Api().post('registerUser', {
@@ -31,6 +53,14 @@ export default {
     return Api().post('validateUser', {
       userId: userId,
       password:password
+    }) 
+  },
+  queryByObjectType() {
+    return Api().get('queryByObjectType')
+  },
+  queryWithQueryString(selected) {
+    return Api().post('queryWithQueryString', {
+      selected: selected
     }) 
   },
   queryByKey(key) {

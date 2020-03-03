@@ -38,7 +38,7 @@ app.post('/queryRecords', async (req,res) => {
   console.log(req.body);
   let args = req.body;
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(req.body.userId);
   console.log('after network OBj');
   let response = await network.invoke(networkObj, true, 'queryRecords', JSON.stringify(args));
   let parsedResponse = await JSON.parse(response);
@@ -49,10 +49,12 @@ app.post('/queryRecords', async (req,res) => {
 app.post('/giveAuth', async (req,res) => {
   console.log('req.body: ');
   console.log(req.body);
-  let args = [req.body];
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(req.body.patientId);
   console.log('after network OBj');
+ 
+  let args = [JSON.stringify(req.body)];
+
   let response = await network.invoke(networkObj, false, 'giveAuth', args);
   if(response.error){
     res.send(response.error);
@@ -67,10 +69,12 @@ app.post('/giveAuth', async (req,res) => {
 app.post('/removeAuth', async (req,res) => {
   console.log('req.body: ');
   console.log(req.body);
-  let args = [req.body];
 
-  let networkObj = await network.connectToNetwork(appAdmin);
+  let networkObj = await network.connectToNetwork(req.body.patientId);
   console.log('after network OBj');
+
+  let args = [JSON.stringify(req.body)];
+
   let response = await network.invoke(networkObj, false, 'removeAuth', args);
   if(response.error){
     res.send(response.error);
@@ -85,10 +89,12 @@ app.post('/removeAuth', async (req,res) => {
 app.post('/createRecord', async (req, res) => {
   console.log('req.body: ');
   console.log(req.body);
-  let args = [req.body.args];
 
   let networkObj = await network.connectToNetwork(req.body.userId);
   console.log('after network OBj')
+
+  let args = [JSON.stringify(req.body.args)];
+
   let response = await network.invoke(networkObj,false,'createRecord', args);
   if (response.error) {
     res.send(response.error);
@@ -103,10 +109,12 @@ app.post('/createRecord', async (req, res) => {
 app.post('/deleteRecord', async (req, res) => {
   console.log('req.body: ');
   console.log(req.body);
-  let args = [req.body.args];
 
   let networkObj = await network.connectToNetwork(req.body.userId);
-  console.log('after network OBj')
+  console.log('after network OBj');
+
+  let args = [JSON.stringify(req.body.args)];
+
   let response = await network.invoke(networkObj,false,'deleteRecord', args);
   if (response.error) {
     res.send(response.error);
@@ -147,7 +155,7 @@ app.post('/registerUser', async (req, res) => {
     let args = req.body;
     //connect to network and update the state with userId  
 
-    let invokeResponse = await network.invoke(networkObj, false, 'createUser', [JSON.stringify(args)]);
+    let invokeResponse = await network.invoke(networkObj, false, 'createUser', [args]);
     
     if (invokeResponse.error) {
       res.send(invokeResponse.error);
